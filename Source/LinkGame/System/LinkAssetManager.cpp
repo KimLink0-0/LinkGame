@@ -7,7 +7,6 @@
 
 ULinkAssetManager::ULinkAssetManager()
 {
-	
 }
 
 ULinkAssetManager& ULinkAssetManager::Get()
@@ -15,10 +14,10 @@ ULinkAssetManager& ULinkAssetManager::Get()
 	check(GEngine);
 	
 	// LinkAssetManager 는 UEngine 의 GEngine 의 AssetManager 의 class 를 오버라이드 했기 때문에 AssetManager 가 존재한다
-	ULinkAssetManager* LinkAssetManager = Cast<ULinkAssetManager>(GEngine->AssetManager);
-	if (LinkAssetManager)
+	ULinkAssetManager* Singleton = Cast<ULinkAssetManager>(GEngine->AssetManager);
+	if (Singleton)
 	{
-		return *LinkAssetManager;
+		return *Singleton;
 	}
 	
 	UE_LOG(LogLink, Fatal, TEXT("invalid AssetManagerClassname in DefaultEngine.ini(protect settings); it must be LinkAssetManager"));
@@ -71,9 +70,13 @@ void ULinkAssetManager::AddLoadedAsset(const UObject* Asset)
 {
 	if (ensureAlways(Asset))
 	{
+		// Lock 생성
+		// 하나의 스레드만 사용
 		FScopeLock LoadedAssetsLock(&LoadedAssetsCritical);
 		LoadedAssets.Add(Asset);
 	}
+	// Lock 해제
+	// LoadedAssetsLock 가 스코프 밖으로 나가며 사라지면서 자연스레 락도 해제된다.
 }
 
 void ULinkAssetManager::StartInitialLoading()
@@ -81,3 +84,4 @@ void ULinkAssetManager::StartInitialLoading()
 	// This does all of the scanning, need to do this now even if loads are deferred
 	Super::StartInitialLoading();
 }
+

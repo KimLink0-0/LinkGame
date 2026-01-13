@@ -6,7 +6,6 @@
 #include "Engine/AssetManager.h"
 #include "LinkAssetManager.generated.h"
 
-
 UCLASS()
 class LINKGAME_API ULinkAssetManager : public UAssetManager
 {
@@ -42,12 +41,13 @@ private:
 	TSet<TObjectPtr<const UObject>> LoadedAssets;
 
 	// Used for a scope lock when modifying the list of load assets.
-	// Object 단위 Locking 한 번에 
+	// Object 단위 Locking
 	FCriticalSection LoadedAssetsCritical;
 	
 };
 
 // GetAsset은 정적 로딩으로 BP Class 와 Object 로딩에 사용
+// AssetManager 는 GetAsset 또는 GetSubclass 를 통해서 에셋을 동기 로딩을 진행한다
 template<typename AssetType>
 AssetType* ULinkAssetManager::GetAsset(const TSoftObjectPtr<AssetType>& AssetPointer, bool bKeepInMemory)
 {
@@ -89,6 +89,7 @@ TSubclassOf<AssetType> ULinkAssetManager::GetSubclass(const TSoftClassPtr<AssetT
 	if (AssetPath.IsValid())
 	{
 		LoadedSubclass = AssetPointer.Get();
+		
 		if (!LoadedSubclass)
 		{
 			LoadedSubclass = Cast<UClass>(SynchronousLoadAsset(AssetPath));
