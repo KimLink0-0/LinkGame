@@ -14,5 +14,8 @@ class LINKGAME_API ULinkPawnData : public UPrimaryDataAsset
 	
 public:
 	// 초기화 생성자
-	ULinkPawnData(const FObjectInitializer& ObjectInitializer);
+	ULinkPawnData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Link|Pawn")
+	TSubclassOf<APawn> PawnClass;
 };

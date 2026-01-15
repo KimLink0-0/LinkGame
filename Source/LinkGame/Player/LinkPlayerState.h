@@ -7,8 +7,15 @@
 #include "LinkPlayerState.generated.h"
 
 
+class ULinkExperienceDefinition;
+
 UCLASS()
 class LINKGAME_API ALinkPlayerState : public APlayerState
 {
 	GENERATED_BODY()
+	
+public:
+	virtual void PostInitializeComponents() override;
+	
+	void OnLinkExperienceLoaded(const ULinkExperienceDefinition* CurrentExperience);
 };
