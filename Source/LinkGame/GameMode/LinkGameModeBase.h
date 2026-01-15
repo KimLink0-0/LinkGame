@@ -11,4 +11,11 @@ UCLASS()
 class LINKGAME_API ALinkGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+	
+public:
+	ALinkGameModeBase();
+	
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+	
+	void HandleMatchAssignmentIfNotExpectingOne();
 };

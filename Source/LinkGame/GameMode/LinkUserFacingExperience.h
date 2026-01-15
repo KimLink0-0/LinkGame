@@ -13,11 +13,9 @@ class LINKGAME_API ULinkUserFacingExperience : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Experience, meta = (AllowTypes = "Map"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Experience, meta = (AllowedTypes = "Map"))
 	FPrimaryAssetId MapID;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Experience, meta = (AllowTypes = "LinkExperienceDefinition"))
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Experience, meta = (AllowedTypes = "LinkExperienceDefinition"))
 	FPrimaryAssetId ExperienceID;
-	
-	
 };
