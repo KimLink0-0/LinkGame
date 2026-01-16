@@ -8,7 +8,20 @@ public class LinkGame : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "ModularGameplay", "GameFeatures" });
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			"EnhancedInput",
+			
+			"GameplayTags",
+			// 컴포넌트 동적 주입을 위해
+			"ModularGameplay",
+			// Experience 내 GameFeatureAction 처리를 위해
+			"GameFeatures"
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 		

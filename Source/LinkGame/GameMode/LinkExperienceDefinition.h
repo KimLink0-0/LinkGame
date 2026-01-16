@@ -19,7 +19,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Gameplay)
 	TObjectPtr<ULinkPawnData> DefaultPawnData;
 	
-	
 	// 마킹 및 기억용
 	// 게임 모드에 따른 GameFeature plugin 을 로딩하는데 필요한 연결고리
 	UPROPERTY(EditDefaultsOnly, Category = Gameplay)

@@ -3,6 +3,7 @@
 
 #include "System/LinkAssetManager.h"
 
+#include "LinkGameplayTags.h"
 #include "LinkLogChannels.h"
 
 ULinkAssetManager::ULinkAssetManager()
@@ -83,5 +84,7 @@ void ULinkAssetManager::StartInitialLoading()
 {
 	// This does all of the scanning, need to do this now even if loads are deferred
 	Super::StartInitialLoading();
+	
+	FLinkGameplayTags::InitializeNativeTags();
 }
 
