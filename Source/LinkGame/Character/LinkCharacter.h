@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "LinkCharacter.generated.h"
 
+class ULinkPawnExtensionComponent;
+
 UCLASS()
 class LINKGAME_API ALinkCharacter : public ACharacter
 {
@@ -25,4 +27,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Link|Character")
+	TObjectPtr<ULinkPawnExtensionComponent> PawnExtComponent;
 };

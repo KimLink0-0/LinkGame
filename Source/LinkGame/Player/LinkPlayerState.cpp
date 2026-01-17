@@ -5,6 +5,7 @@
 
 #include "GameMode/LinkExperienceManagerComponent.h"
 #include "GameMode/LinkGameModeBase.h"
+#include "Character/LinkPawnData.h"
 
 
 void ALinkPlayerState::PostInitializeComponents()

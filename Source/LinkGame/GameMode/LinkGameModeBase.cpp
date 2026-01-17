@@ -11,6 +11,7 @@
 #include "Player/LinkPlayerController.h"
 #include "Player/LinkPlayerState.h"
 #include "Character/LinkPawnData.h"
+#include "Character/LinkPawnExtensionComponent.h"
 
 ALinkGameModeBase::ALinkGameModeBase()
 {
@@ -82,12 +83,34 @@ void ALinkGameModeBase::HandleStartingNewPlayer_Implementation(APlayerController
 	}
 }
 
-// APawn* ALinkGameModeBase::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer,
-// 	const FTransform& SpawnTransform)
-// {
-// 	UE_LOG(LogLink, Log, TEXT("SpawnDefaultPawnAtTransform_Implementation is called!"));
-// 	return Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer, SpawnTransform);
-// }
+APawn* ALinkGameModeBase::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer,
+	const FTransform& SpawnTransform)
+{
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Instigator = GetInstigator();
+	SpawnInfo.ObjectFlags |= RF_Transient;
+	SpawnInfo.bDeferConstruction = true;
+	
+	// ExtensionComponent 에 PawnData 를 Caching 해주기 위한 로직
+	if (UClass* PawnClass = GetDefaultPawnClassForController(NewPlayer))
+	{
+		if (APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PawnClass, SpawnTransform, SpawnInfo))
+		{
+			if (ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(SpawnedPawn))
+			{
+				if (const ULinkPawnData* PawnData = GetPawnDataForController(NewPlayer))
+				{
+					PawnExtComp->SetPawnData(PawnData);
+				}
+			}
+			
+			SpawnedPawn->FinishSpawning(SpawnTransform);
+			return SpawnedPawn;
+		}
+	}
+	
+	return nullptr;
+}
 
 UClass* ALinkGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
 {

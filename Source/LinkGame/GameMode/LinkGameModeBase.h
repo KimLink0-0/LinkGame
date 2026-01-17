@@ -29,7 +29,8 @@ public:
 	// final 로 하는 이유, 해당 GameMode 를 상속하는 클래스는 없을 예정이라서
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) final;
 	
-	// virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform) final;
+	// Pawn 이 최종적으로 소환되는 시점을 체크
+	virtual APawn* SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform) final;
 	
 	// OnExperienceLoaded 안에 있는 RestartPlayer 함수가 실행될 때 PawnData 를 해당 함수로 가져옴
 	// 그래서 GetDefaultPawnClassForController 를 Override 해서 우리가 만든 PawnData 를 가져오도록 커스텀
