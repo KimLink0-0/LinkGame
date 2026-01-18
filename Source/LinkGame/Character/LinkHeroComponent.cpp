@@ -9,6 +9,8 @@
 #include "Components/GameFrameworkComponentManager.h"
 #include "Player/LinkPlayerState.h"
 #include "LinkPawnData.h"
+#include "Camera/LinkCameraComponent.h"
+#include "Camera/LinkCameraMode.h"
 
 const FName ULinkHeroComponent::NAME_ActorFeatureName("Hero");
 
@@ -86,9 +88,11 @@ void ULinkHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* M
 	
 	const FLinkGameplayTags& InitTags = FLinkGameplayTags::Get();
 	
-	// DataAvailable -> DataInitialized 
+	// DataAvailable -> DataInitialized  
 	if (CurrentState == InitTags.InitState_DataAvailable && DesiredState == InitTags.InitState_DataInitialized)
 	{
+		// 해당 변경이 일어나는 시점 (DataAvailable -> DataInitialized) 은 SetupPlayerInputComponent 이후 시점이기에 
+		// Pawn 과 PlayerState 모두 존재
 		APawn* Pawn = GetPawn<APawn>();
 		ALinkPlayerState* LinkPS = GetPlayerState<ALinkPlayerState>();
 		if (!ensure(Pawn && LinkPS))
@@ -103,6 +107,15 @@ void ULinkHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* M
 		if (ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
 		{
 			PawnData = PawnExtComp->GetPawnData<ULinkPawnData>();
+		}
+		
+		// Camera Handling
+		if (bIsLocallyControlled && PawnData)
+		{
+			if (ULinkCameraComponent* CameraComponent = ULinkCameraComponent::FindCameraComponent(Pawn))
+			{
+				CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
+			}
 		}
 	}
 }
@@ -146,4 +159,23 @@ void ULinkHeroComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	UnregisterInitStateFeature();
 	
 	Super::EndPlay(EndPlayReason);
+}
+
+TSubclassOf<ULinkCameraMode> ULinkHeroComponent::DetermineCameraMode() const
+{
+	const APawn* Pawn = GetPawn<APawn>();
+	if (!Pawn)
+	{
+		return nullptr;
+	}
+	
+	if (ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+	{
+		if (const ULinkPawnData* PawnData = PawnExtComp->GetPawnData<ULinkPawnData>())
+		{
+			return PawnData->DefaultCameraMode;
+		}
+	}
+	
+	return nullptr;
 }

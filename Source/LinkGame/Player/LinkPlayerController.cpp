@@ -2,3 +2,10 @@
 
 
 #include "LinkPlayerController.h"
+
+#include "Camera/LinkPlayerCameraManager.h"
+
+ALinkPlayerController::ALinkPlayerController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	PlayerCameraManagerClass = ALinkPlayerCameraManager::StaticClass();
+}

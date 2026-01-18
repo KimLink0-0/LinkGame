@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "LinkPawnData.generated.h"
 
+class ULinkCameraMode;
 
 UCLASS()
 class LINKGAME_API ULinkPawnData : public UPrimaryDataAsset
@@ -18,4 +19,7 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Link|Pawn")
 	TSubclassOf<APawn> PawnClass;
+	
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Link|Pawn")
+	TSubclassOf<ULinkCameraMode> DefaultCameraMode;
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "LinkCharacter.generated.h"
 
+class ULinkCameraComponent;
 class ULinkPawnExtensionComponent;
 
 UCLASS()
@@ -31,4 +32,7 @@ public:
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Link|Character")
 	TObjectPtr<ULinkPawnExtensionComponent> PawnExtComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Link|Character")
+	TObjectPtr<ULinkCameraComponent> CameraComponent;
 };

@@ -2,6 +2,7 @@
 
 #include "LinkCharacter.h"
 #include "LinkPawnExtensionComponent.h"
+#include "Camera/LinkCameraComponent.h"
 
 // Sets default values
 ALinkCharacter::ALinkCharacter()
@@ -10,7 +11,13 @@ ALinkCharacter::ALinkCharacter()
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	
+	// PawnExtensionComponent 생성
 	PawnExtComponent = CreateDefaultSubobject<ULinkPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+	
+	// CameraComponent 생성
+	CameraComponent = CreateDefaultSubobject<ULinkCameraComponent>(TEXT("CameraComponent"));
+	CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
+	
 }
 
 // Called when the game starts or when spawned

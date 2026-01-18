@@ -7,6 +7,7 @@
 #include "Components/PawnComponent.h"
 #include "LinkHeroComponent.generated.h"
 
+class ULinkCameraMode;
 
 UCLASS(Blueprintable, meta=(BlueprintSpawnableComponent))
 class LINKGAME_API ULinkHeroComponent : public UPawnComponent, public IGameFrameworkInitStateInterface
@@ -38,5 +39,8 @@ public:
 	void BeginPlay() final;
 	
 	void EndPlay(const EEndPlayReason::Type EndPlayReason) final;
+	
+public:
+	TSubclassOf<ULinkCameraMode> DetermineCameraMode() const;
 
 };

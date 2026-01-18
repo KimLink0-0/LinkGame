@@ -11,4 +11,7 @@ UCLASS()
 class LINKGAME_API ALinkPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+	
+public:
+	ALinkPlayerController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 };
