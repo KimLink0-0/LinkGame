@@ -13,7 +13,6 @@ ULinkPawnExtensionComponent::ULinkPawnExtensionComponent(const FObjectInitialize
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-PRAGMA_DISABLE_OPTIMIZATION
 
 void ULinkPawnExtensionComponent::SetPawnData(const ULinkPawnData* InPawnData)
 {
@@ -52,7 +51,6 @@ void ULinkPawnExtensionComponent::OnRegister()
 
 	UGameFrameworkComponentManager* Manager = UGameFrameworkComponentManager::GetForActor(GetOwningActor());
 }
-PRAGMA_ENABLE_OPTIMIZATION
 
 void ULinkPawnExtensionComponent::BeginPlay()
 {
