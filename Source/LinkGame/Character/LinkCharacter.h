@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "ModularCharacter.h"
 #include "LinkCharacter.generated.h"
 
 class ULinkPawnExtensionComponent;
 class ULinkCameraComponent;
 
 UCLASS()
-class LINKGAME_API ALinkCharacter : public ACharacter
+class LINKGAME_API ALinkCharacter : public AModularCharacter
 {
 	GENERATED_BODY()
 

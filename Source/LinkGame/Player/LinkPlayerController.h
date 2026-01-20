@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
+#include "ModularPlayerController.h"
 #include "LinkPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LINKGAME_API ALinkPlayerController : public APlayerController
+class LINKGAME_API ALinkPlayerController : public AModularPlayerController
 {
 	GENERATED_BODY()
 public:
