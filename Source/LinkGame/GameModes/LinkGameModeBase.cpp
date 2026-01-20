@@ -11,6 +11,7 @@
 #include "Player/LinkPlayerState.h"
 #include "Character/LinkPawnData.h"
 #include "Character/LinkPawnExtensionComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ALinkGameModeBase::ALinkGameModeBase()
 {
@@ -91,6 +92,14 @@ void ALinkGameModeBase::HandleMatchAssignmentIfNotExpectingOne()
 
 	UWorld* World = GetWorld();
 	
+	// GameFeature 생성 후 수정 된 코드
+	if (!ExperienceId.IsValid() && UGameplayStatics::HasOption(OptionsString, TEXT("Experience")))
+	{
+		const FString ExperienceFromOptions = UGameplayStatics::ParseOption(OptionsString, TEXT("Experience"));
+		ExperienceId = FPrimaryAssetId(FPrimaryAssetType(ULinkExperienceDefinition::StaticClass()->GetFName()), FName(*ExperienceFromOptions));
+	}
+	
+	// 기존 하드 코딩
 	if (!ExperienceId.IsValid())
 	{
 		ExperienceId = FPrimaryAssetId(FPrimaryAssetType("LinkExperienceDefinition"), FName("B_LinkDefaultExperience"));
