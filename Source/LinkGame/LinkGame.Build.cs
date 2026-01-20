@@ -21,6 +21,8 @@ public class LinkGame : ModuleRules
 			// GAS
 			"GameplayTags",
 			"GameFeatures",
+			// CommonUser
+			"CommonUser",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
