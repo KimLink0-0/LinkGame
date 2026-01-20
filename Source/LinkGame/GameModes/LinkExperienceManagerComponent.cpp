@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "LinkExperienceManagerComponent.h"
+
+#include "GameFeaturesSubsystem.h"
 #include "GameFeaturesSubsystemSettings.h"
 #include "LinkExperienceDefinition.h"
 #include "LinkGame/System/LinkAssetManager.h"
@@ -90,9 +92,52 @@ void ULinkExperienceManagerComponent::StartExperienceLoad()
 
 void ULinkExperienceManagerComponent::OnExperienceLoadComplete()
 {
+	// 게임 Feature 를 Load 하고 Activate 하는 함수 
 	static int32 OnExperienceLoadComplete_FrameNumber = GFrameNumber;
 
-	OnExperienceFullLoadCompleted();
+	check(LoadState == ELinkExperienceLoadState::Loading);
+	check(CurrentExperience);
+	
+	// 이전 활성화 된 GameFeature Plugin 의 URL 을 Clear 
+	GameFeaturePluginURLs.Reset();
+	
+	// 람다식 사용법 익히기
+	auto CollectGameFeaturePluginURLs = [This = this](const UPrimaryDataAsset* Context, const TArray<FString>& FeaturePluginList)
+	{
+		for (const FString& PluginName : FeaturePluginList)
+		{
+			FString PluginURL;
+			if (UGameFeaturesSubsystem::Get().GetPluginURLByName(PluginName, PluginURL))
+			{
+				This->GameFeaturePluginURLs.AddUnique(PluginURL);
+			}
+		}
+	};
+	
+	CollectGameFeaturePluginURLs(CurrentExperience, CurrentExperience->GameFeaturesToEnable);
+	
+	NumGameFeaturePluginsLoading = GameFeaturePluginURLs.Num();
+	if (NumGameFeaturePluginsLoading)
+	{
+		LoadState = ELinkExperienceLoadState::LadingGameFeatures;
+		for (const FString& PluginURL : GameFeaturePluginURLs)
+		{
+			UGameFeaturesSubsystem::Get().LoadAndActivateGameFeaturePlugin(PluginURL, FGameFeaturePluginLoadComplete::CreateUObject(this, &ThisClass::OnGameFeaturePluginLoadComplete));
+		}
+	}
+	else
+	{
+		OnExperienceFullLoadCompleted();
+	}
+}
+
+void ULinkExperienceManagerComponent::OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result)
+{
+	NumGameFeaturePluginsLoading--;
+	if (NumGameFeaturePluginsLoading == 0)
+	{
+		OnExperienceFullLoadCompleted();
+	}
 }
 
 void ULinkExperienceManagerComponent::OnExperienceFullLoadCompleted()
@@ -110,3 +155,5 @@ const ULinkExperienceDefinition* ULinkExperienceManagerComponent::GetCurrentExpe
 	check(CurrentExperience != nullptr);
 	return CurrentExperience;
 }
+
+

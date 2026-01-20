@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/GameStateComponent.h"
+#include "GameFeaturePluginOperationResult.h"
 #include "LinkExperienceManagerComponent.generated.h"
 
 class ULinkExperienceDefinition;
@@ -12,6 +13,7 @@ enum class ELinkExperienceLoadState
 {
 	Unloaded,
 	Loading,
+	LadingGameFeatures,
 	Loaded,
 	Deactivating,
 };
@@ -33,6 +35,9 @@ public:
 	void OnExperienceLoadComplete();
 	void OnExperienceFullLoadCompleted();
 	const ULinkExperienceDefinition* GetCurrentExperienceChecked() const;
+	
+	// GameFeature
+	void OnGameFeaturePluginLoadComplete(const UE::GameFeatures::FResult& Result);
 
 public:
 	UPROPERTY()
@@ -41,4 +46,8 @@ public:
 	ELinkExperienceLoadState LoadState = ELinkExperienceLoadState::Unloaded;
 
 	FOnLinkExperienceLoaded OnExperienceLoaded;
+	
+	// 활성화 된 GameFeature PlugIn
+	int32 NumGameFeaturePluginsLoading = 0;
+	TArray<FString> GameFeaturePluginURLs;
 };
