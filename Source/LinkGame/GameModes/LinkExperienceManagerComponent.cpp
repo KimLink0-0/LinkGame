@@ -2,8 +2,10 @@
 
 #include "LinkExperienceManagerComponent.h"
 
+#include "GameFeatureAction.h"
 #include "GameFeaturesSubsystem.h"
 #include "GameFeaturesSubsystemSettings.h"
+#include "LinkExperienceActionSet.h"
 #include "LinkExperienceDefinition.h"
 #include "LinkGame/System/LinkAssetManager.h"
 
@@ -144,6 +146,42 @@ void ULinkExperienceManagerComponent::OnExperienceFullLoadCompleted()
 {
 	check(LoadState != ELinkExperienceLoadState::Loaded);
 
+	LoadState = ELinkExperienceLoadState::ExecutingActions;
+	
+	FGameFeatureActivatingContext Context;
+	
+	// Context 에 WorldContextHandle 을 저장시켜주기 위한 로직
+	// WorldContextFormWorld 가 왜 필요한가? 
+	// Game Feature 는 Game Feature Subsystem 에서 관리, 해당 Subsystem 은 EngineSubsystem
+	// WorldContext 가 없으면 어떤 월드의 Action 이 실행되는지 알 수 없음
+	const FWorldContext* ExistingWorldContext = GEngine->GetWorldContextFromWorld(GetWorld());
+	if (ExistingWorldContext)
+	{
+		Context.SetRequiredWorldContextHandle((ExistingWorldContext->ContextHandle));
+	}
+	
+	
+	auto ActivateListOfActions = [&Context](const TArray<UGameFeatureAction*>& ActionList)
+	{
+		for (UGameFeatureAction* Action : ActionList)
+		{
+			if (Action)
+			{
+				// GameFeature 는 Registering -> Loading -> Activating 순으로 진행된다. 
+				Action->OnGameFeatureRegistering();
+				Action->OnGameFeatureLoading();
+				Action->OnGameFeatureActivating(Context);
+			}
+		}
+	};
+	
+	ActivateListOfActions(CurrentExperience->Actions);
+	
+	for (const TObjectPtr<ULinkExperienceActionSet>& ActionSet : CurrentExperience->ActionSets)
+	{
+		ActivateListOfActions(ActionSet->Actions);
+	}
+	
 	LoadState = ELinkExperienceLoadState::Loaded;
 	OnExperienceLoaded.Broadcast(CurrentExperience);
 	OnExperienceLoaded.Clear();

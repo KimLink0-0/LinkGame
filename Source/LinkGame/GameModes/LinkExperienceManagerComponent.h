@@ -14,6 +14,7 @@ enum class ELinkExperienceLoadState
 	Unloaded,
 	Loading,
 	LadingGameFeatures,
+	ExecutingActions,
 	Loaded,
 	Deactivating,
 };

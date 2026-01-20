@@ -16,6 +16,8 @@
 
 const FName ULinkHeroComponent::NAME_ActorFeatureName("Hero");
 
+const FName ULinkHeroComponent::NAME_BindInputsNow("BindInputsNow");
+
 ULinkHeroComponent::ULinkHeroComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	PrimaryComponentTick.bStartWithTickEnabled = false;
@@ -223,6 +225,8 @@ void ULinkHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCompo
 			}
 		}
 	}
+	
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(const_cast<APawn*>(Pawn), NAME_BindInputsNow);
 }
 
 void ULinkHeroComponent::Input_Move(const FInputActionValue& InputActionValue)

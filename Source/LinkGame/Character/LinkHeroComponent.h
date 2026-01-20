@@ -18,8 +18,10 @@ class LINKGAME_API ULinkHeroComponent : public UPawnComponent, public IGameFrame
 public:
 	ULinkHeroComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	/** FeatureName ���� */
+	/** FeatureName */
 	static const FName NAME_ActorFeatureName;
+	
+	static const FName NAME_BindInputsNow;
 
 	/**
 	 * UPawnComponent interface
