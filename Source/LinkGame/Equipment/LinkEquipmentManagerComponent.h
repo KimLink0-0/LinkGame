@@ -42,7 +42,7 @@ public:
 	TObjectPtr<UActorComponent> OwnerComponent;
 };
 
-UCLASS()
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class LINKGAME_API ULinkEquipmentManagerComponent : public UPawnComponent
 {
 	GENERATED_BODY()

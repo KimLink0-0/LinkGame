@@ -6,6 +6,7 @@
 #include "LinkEquipmentDefinition.h"
 #include "LinkEquipmentInstance.h"
 #include "LinkEquipmentManagerComponent.h"
+#include "LinkLogChannels.h"
 #include "Inventory/LinkInventoryFragment_EquippableItem.h"
 #include "Inventory/LinkInventoryItemInstance.h"
 
@@ -84,6 +85,7 @@ void ULinkQuickBarComponent::EquipItemInSlot()
 			TSubclassOf<ULinkEquipmentDefinition> EquipDef = EquipInfo->EquipmentDefinition;
 			if (EquipDef)
 			{
+				
 				if (ULinkEquipmentManagerComponent* EquipmentManager = FindEquipmentManager())
 				{
 					EquippedItem = EquipmentManager->EquipItem(EquipDef);

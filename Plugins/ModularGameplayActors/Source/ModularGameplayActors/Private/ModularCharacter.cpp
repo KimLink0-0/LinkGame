@@ -15,14 +15,14 @@ void AModularCharacter::PreInitializeComponents()
 
 void AModularCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, UGameFrameworkComponentManager::NAME_GameActorReady);
+	// 게임 Feature 에서 AddComponent 등의 기능을 사용할 수 없게 됨
+	// 순서가 바뀌면 간헐적으로 Crash 발생함
+	UGameFrameworkComponentManager::RemoveGameFrameworkComponentReceiver(this);
 	Super::EndPlay(EndPlayReason);
 }
 
 void AModularCharacter::BeginPlay()
 {
-	// 게임 Feature 에서 AddComponent 등의 기능을 사용할 수 없게 됨
-	// 순서가 바뀌면 간헐적으로 Crash 발생함
-	UGameFrameworkComponentManager::RemoveGameFrameworkComponentReceiver(this);
+	UGameFrameworkComponentManager::SendGameFrameworkComponentExtensionEvent(this, UGameFrameworkComponentManager::NAME_GameActorReady);
 	Super::BeginPlay();
 }
