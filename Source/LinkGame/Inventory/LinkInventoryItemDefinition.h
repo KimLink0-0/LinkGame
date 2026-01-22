@@ -12,9 +12,10 @@ UCLASS(Abstract, DefaultToInstanced, EditInlineNew)
 class ULinkInventoryItemFragment : public UObject
 {
 	GENERATED_BODY()
+	
 };
 
-UCLASS()
+UCLASS(Blueprintable)
 class LINKGAME_API ULinkInventoryItemDefinition : public UObject
 {
 	GENERATED_BODY()
@@ -22,6 +23,9 @@ class LINKGAME_API ULinkInventoryItemDefinition : public UObject
 public:
 	ULinkInventoryItemDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
+	const ULinkInventoryItemFragment* FindFragmentByClass(TSubclassOf<ULinkInventoryItemFragment> FragmentClass) const;
+	
+public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Display)
 	FText DisplayName;
 	

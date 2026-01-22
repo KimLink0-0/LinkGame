@@ -25,8 +25,10 @@ struct FLinkInventoryList
 	GENERATED_BODY()
 public:
 	FLinkInventoryList(UActorComponent* InOwnerComponent = nullptr) 
-		: OwnerComponent(InOwnerComponent)
+		: OwnerComponent(InOwnerComponent), Entries({})
 	{}
+	
+	ULinkInventoryItemInstance* AddEntry(TSubclassOf<ULinkInventoryItemDefinition> ItemDef);
 	
 	UPROPERTY()
 	TArray<FLinkInventoryEntry> Entries;
@@ -44,6 +46,9 @@ class LINKGAME_API ULinkInventoryManagerComponent : public UActorComponent
 	
 public:	
 	ULinkInventoryManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	
+	UFUNCTION(BlueprintCallable, Category = Inventory)
+	ULinkInventoryItemInstance* AddItemDefinition (TSubclassOf<ULinkInventoryItemDefinition> ItemDef);
 	
 	UPROPERTY()
 	FLinkInventoryList InventoryList;

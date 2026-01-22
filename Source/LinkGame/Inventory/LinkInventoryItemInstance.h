@@ -8,6 +8,7 @@
 
 
 class ULinkInventoryItemDefinition;
+class ULinkInventoryItemFragment;
 
 UCLASS()
 class LINKGAME_API ULinkInventoryItemInstance : public UObject
@@ -17,6 +18,15 @@ class LINKGAME_API ULinkInventoryItemInstance : public UObject
 public:
 	ULinkInventoryItemInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
+	const ULinkInventoryItemFragment* FindFragmentByClass(TSubclassOf<ULinkInventoryItemFragment> FragmentClass) const;
+	
+	template <typename ResultClass>
+	const ResultClass* FindFragmentByClass() const
+	{
+		return (ResultClass*)FindFragmentByClass(ResultClass::StaticClass());
+	}
+	
+public:
 	UPROPERTY()
 	TSubclassOf<ULinkInventoryItemDefinition> ItemDefinition;
 };

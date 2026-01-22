@@ -6,3 +6,19 @@
 ULinkInventoryItemDefinition::ULinkInventoryItemDefinition(const FObjectInitializer& ObjectInitializer) : Super (ObjectInitializer)
 {
 }
+
+const ULinkInventoryItemFragment* ULinkInventoryItemDefinition::FindFragmentByClass(
+	TSubclassOf<ULinkInventoryItemFragment> FragmentClass) const
+{
+	if (FragmentClass)
+	{
+		for (ULinkInventoryItemFragment* Fragment : Fragments)
+		{
+			if (Fragment && Fragment->IsA(FragmentClass))
+			{
+				return Fragment;
+			}
+		}
+	}
+	return nullptr;
+}

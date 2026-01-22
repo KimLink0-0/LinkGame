@@ -2,3 +2,10 @@
 
 
 #include "LinkEquipmentDefinition.h"
+
+#include "LinkEquipmentInstance.h"
+
+ULinkEquipmentDefinition::ULinkEquipmentDefinition(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	InstanceType = ULinkEquipmentInstance::StaticClass();
+}

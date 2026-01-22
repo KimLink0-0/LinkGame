@@ -13,6 +13,6 @@ class LINKGAME_API ULinkInventoryFragment_EquippableItem : public ULinkInventory
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category = Link)
 	TSubclassOf<ULinkEquipmentDefinition> EquipmentDefinition;
 };
