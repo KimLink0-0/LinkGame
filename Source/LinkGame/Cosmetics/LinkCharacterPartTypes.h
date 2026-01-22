@@ -10,6 +10,7 @@ struct FLinkCharacterPartHandle
 {
 	GENERATED_BODY()
 	
+public:
 	void Reset()
 	{
 		PartHandle = INDEX_NONE;
@@ -29,6 +30,7 @@ struct FLinkCharacterPart
 {
 	GENERATED_BODY()
 	
+public:
 	// Part 로 생성된 Actor 의 Class 정보
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> PartClass;

@@ -16,6 +16,7 @@ struct FLinkAppliedCharacterPartEntry
 {
 	GENERATED_BODY()
 	
+public:
 	// CharacterPart 에 대한 메타 데이터 (정의)
 	UPROPERTY()
 	FLinkCharacterPart Part;
@@ -38,6 +39,7 @@ struct FLinkCharacterPartList
 {
 	GENERATED_BODY()
 	
+public:
 	FLinkCharacterPartList()
 		: OwnerComponent(nullptr)
 	{}

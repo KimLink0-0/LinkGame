@@ -14,6 +14,7 @@ struct FLinkControllerCharacterPartEntry
 {
 	GENERATED_BODY()
 	
+public:
 	// 메타 데이터, CharacterPart 에 대한 정의
 	UPROPERTY(EditAnywhere)
 	FLinkCharacterPart Part;

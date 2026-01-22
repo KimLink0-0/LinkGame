@@ -6,9 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "LinkAnimInstance.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class LINKGAME_API ULinkAnimInstance : public UAnimInstance
 {

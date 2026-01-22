@@ -7,10 +7,39 @@
 #include "LinkCosmeticAnimationTypes.generated.h"
 
 USTRUCT(BlueprintType)
+struct FLinkAnimLayerSelectionEntry
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UAnimInstance> Layer;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTagContainer LayerTags;
+};
+
+
+USTRUCT(BlueprintType)
+struct FLinkAnimLayerSelectionSet
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FLinkAnimLayerSelectionEntry> LayerRules;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UAnimInstance> DefaultLayer;
+	
+};
+
+USTRUCT(BlueprintType)
 struct FLinkAnimBodyStyleSelectionEntry
 {
 	GENERATED_BODY()
 	
+public:
 	// AnimLayer 를 적용할 대상 SkeletalMesh
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USkeletalMesh> Mesh = nullptr;
@@ -26,6 +55,7 @@ struct FLinkAnimBodyStyleSelectionSet
 {
 	GENERATED_BODY()
 	
+public:
 	USkeletalMesh* SelectBestBodyStyle(const FGameplayTagContainer& CosmeticTags) const;
 	
 	// AnimLayer 를 적용할 SkeletalMesh, Animation-Mesh 간 규칙
