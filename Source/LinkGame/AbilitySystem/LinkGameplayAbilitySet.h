@@ -29,7 +29,7 @@ public:
 	int32 AbilityLevel = 1;
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FLinkAbilitySet_GrantedHandles
 {
 	GENERATED_BODY()
@@ -54,6 +54,6 @@ public:
 	void GiveToAbilitySystem(ULinkAbilitySystemComponent* AbilitySystemComponent, FLinkAbilitySet_GrantedHandles* OutGrantedHandles, UObject* SourceObject = nullptr);
 	
 public:
-	UPROPERTY()
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Abilities")
 	TArray<FLinkAbilitySet_GameplayAbility> GrantedGameplayAbilities;
 };

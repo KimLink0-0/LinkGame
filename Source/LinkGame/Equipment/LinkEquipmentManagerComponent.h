@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/LinkGameplayAbilitySet.h"
 #include "Components/PawnComponent.h"
 #include "LinkEquipmentManagerComponent.generated.h"
 
@@ -19,6 +20,9 @@ public:
 	
 	UPROPERTY()
 	TObjectPtr<ULinkEquipmentInstance> Instance = nullptr;
+	
+	UPROPERTY()
+	FLinkAbilitySet_GrantedHandles GrantedHandles;
 };
 
 USTRUCT(BlueprintType)
@@ -33,6 +37,8 @@ public:
 	
 	ULinkEquipmentInstance* AddEntry(TSubclassOf<ULinkEquipmentDefinition> EquipmentDefinition);
 	void RemoveEntry(ULinkEquipmentInstance* Instance);
+	
+	ULinkAbilitySystemComponent* GetAbilitySystemComponent() const;
 	
 public:
 	UPROPERTY()
@@ -51,6 +57,9 @@ public:
 	
 	ULinkEquipmentInstance* EquipItem(TSubclassOf<ULinkEquipmentDefinition> EquipmentDefinition);
 	void UnequipItem(ULinkEquipmentInstance* ItemInstance);
+	
+	UFUNCTION(BlueprintCallable)
+	TArray<ULinkEquipmentInstance*> GetEquipmentInstanceOfType(TSubclassOf<ULinkEquipmentInstance> InstanceType) const;
 	
 public:
 	UPROPERTY()

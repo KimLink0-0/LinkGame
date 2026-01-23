@@ -29,6 +29,7 @@ public:
 	// Ability System
 	void InitializeAbilitySystem(ULinkAbilitySystemComponent* InAbilitySystemComponent, AActor* InOwnerActor);
 	void UninitializeAbilitySystem();
+	ULinkAbilitySystemComponent* GetLinkAbilitySystemComponent() const { return AbilitySystemComponent; }
 	
 	// IGameFrameworkInitStateInterface
 	virtual FName GetFeatureName() const final { return NAME_ActorFeatureName; }

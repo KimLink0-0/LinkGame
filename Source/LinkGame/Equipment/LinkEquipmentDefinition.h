@@ -6,6 +6,7 @@
 #include "UObject/Object.h"
 #include "LinkEquipmentDefinition.generated.h"
 
+class ULinkGameplayAbilitySet;
 class ULinkEquipmentInstance;
 
 USTRUCT()
@@ -43,4 +44,8 @@ public:
 	// 해당 장착 아이템을 사용하면, 어떤 Actor 가 Spawn 되는 지에 관한 정보
 	UPROPERTY(EditDefaultsOnly, Category = Equipment)
 	TArray<FLinkEquipmentActorToSpawn> ActorsToSpawn;
+	
+	// 무기에 맞는 Ability 부여를 위해
+	UPROPERTY(EditDefaultsOnly, Category = Equipment)
+	TArray<TObjectPtr<ULinkGameplayAbilitySet>> AbilitySetsToGrant;
 };

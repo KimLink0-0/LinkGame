@@ -7,6 +7,7 @@
 #include "LinkGame/Input/LinkMappableConfigPair.h"
 #include "LinkGame/Input/LinkInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/LinkAbilitySystemComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "LinkGame/LinkGameplayTags.h"
 #include "LinkGame/LinkLogChannels.h"
@@ -233,6 +234,13 @@ void ULinkHeroComponent::InitializePlayerInput(UInputComponent* PlayerInputCompo
 
 				ULinkInputComponent* LinkIC = CastChecked<ULinkInputComponent>(PlayerInputComponent);
 				{
+					// Ability Input
+					{
+						TArray<uint32> BindHandles;
+						LinkIC->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputTagPressed, &ThisClass::Input_AbilityInputTagReleased, BindHandles);
+					}
+					
+					// Native Input
 					LinkIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
 					LinkIC->BindNativeAction(InputConfig, GameplayTags.InputTag_Look_Mouse, ETriggerEvent::Triggered, this, &ThisClass::Input_LookMouse, false);
 				}
@@ -286,5 +294,33 @@ void ULinkHeroComponent::Input_LookMouse(const FInputActionValue& InputActionVal
 	{
 		double AimInversionValue = -Value.Y;
 		Pawn->AddControllerPitchInput(AimInversionValue);
+	}
+}
+
+void ULinkHeroComponent::Input_AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	if (const APawn* Pawn = GetPawn<APawn>())
+	{
+		if (const ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		{
+			if (ULinkAbilitySystemComponent* LinkASC = PawnExtComp->GetLinkAbilitySystemComponent())
+			{
+				LinkASC->AbilityInputTagPressed(InputTag);
+			}
+		}
+	}
+}
+
+void ULinkHeroComponent::Input_AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (const APawn* Pawn = GetPawn<APawn>())
+	{
+		if (const ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		{
+			if (ULinkAbilitySystemComponent* LinkASC = PawnExtComp->GetLinkAbilitySystemComponent())
+			{
+				LinkASC->AbilityInputTagReleased(InputTag);
+			}
+		}
 	}
 }

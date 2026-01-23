@@ -2,6 +2,7 @@
 
 #include "LinkCharacter.h"
 #include "LinkPawnExtensionComponent.h"
+#include "AbilitySystem/LinkAbilitySystemComponent.h"
 #include "LinkGame/Camera/LinkCameraComponent.h"
 
 // Sets default values
@@ -18,6 +19,11 @@ ALinkCharacter::ALinkCharacter()
 		CameraComponent = CreateDefaultSubobject<ULinkCameraComponent>(TEXT("CameraComponent"));
 		CameraComponent->SetRelativeLocation(FVector(-300.0f, 0.0f, 75.0f));
 	}
+}
+
+UAbilitySystemComponent* ALinkCharacter::GetAbilitySystemComponent() const
+{
+	return PawnExtComponent->GetLinkAbilitySystemComponent();
 }
 
 // Called when the game starts or when spawned

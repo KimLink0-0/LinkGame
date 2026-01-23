@@ -14,6 +14,22 @@ void FLinkAbilitySet_GrantedHandles::AddAbilitySpecHandle(const FGameplayAbility
 	}
 }
 
+void FLinkAbilitySet_GrantedHandles::TakeFromAbilitySystem(ULinkAbilitySystemComponent* InAbilitySystemComponent)
+{
+	if (!InAbilitySystemComponent->IsOwnerActorAuthoritative())
+	{
+		return;
+	}
+	
+	for (const FGameplayAbilitySpecHandle& Handle : AbilitySpecHandles)
+	{
+		if (Handle.IsValid())
+		{
+			InAbilitySystemComponent->ClearAbility(Handle);
+		}
+	}
+}
+
 ULinkGameplayAbilitySet::ULinkGameplayAbilitySet(const FObjectInitializer& Initializer) : Super(Initializer)
 {
 }

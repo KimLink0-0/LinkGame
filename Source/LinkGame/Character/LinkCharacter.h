@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "ModularCharacter.h"
 #include "LinkCharacter.generated.h"
 
@@ -10,13 +11,15 @@ class ULinkPawnExtensionComponent;
 class ULinkCameraComponent;
 
 UCLASS()
-class LINKGAME_API ALinkCharacter : public AModularCharacter
+class LINKGAME_API ALinkCharacter : public AModularCharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
 	ALinkCharacter();
+	
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 protected:
 	// Called when the game starts or when spawned

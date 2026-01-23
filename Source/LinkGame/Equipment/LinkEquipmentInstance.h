@@ -22,6 +22,9 @@ public:
 	void K2_OnUnequipped();
 	
 	UFUNCTION(BlueprintPure, Category = Equipment)
+	TArray<AActor*> GetSpawnedActors() const { return SpawnedActors; }
+	
+	UFUNCTION(BlueprintPure, Category = Equipment)
 	APawn* GetPawn() const;
 	
 	// DeterminesOutputType 태그를 사용할 경우 = '값'

@@ -5,4 +5,5 @@
 
 ULinkGameplayAbility::ULinkGameplayAbility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
+	ActivationPolicy = ELinkAbilityActivationPolicy::OnInputTriggered;
 }

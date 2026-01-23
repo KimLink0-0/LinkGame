@@ -5,6 +5,8 @@
 
 #include "LinkEquipmentDefinition.h"
 #include "LinkEquipmentInstance.h"
+#include "AbilitySystemGlobals.h"
+#include "AbilitySystem/LinkAbilitySystemComponent.h"
 
 ULinkEquipmentInstance* FLinkEquipmentList::AddEntry(TSubclassOf<ULinkEquipmentDefinition> EquipmentDefinition)
 {
@@ -26,6 +28,17 @@ ULinkEquipmentInstance* FLinkEquipmentList::AddEntry(TSubclassOf<ULinkEquipmentD
 	NewEntry.Instance = NewObject<ULinkEquipmentInstance>(OwnerComponent->GetOwner(), InstanceType);
 	Result = NewEntry.Instance;
 	
+	// Ability 추가
+	ULinkAbilitySystemComponent* AbilitySystemComponent = GetAbilitySystemComponent();
+	check(AbilitySystemComponent);
+	{
+		for (const TObjectPtr<ULinkGameplayAbilitySet> AbilitySet : EquipmentCDO->AbilitySetsToGrant)
+		{
+			AbilitySet->GiveToAbilitySystem(AbilitySystemComponent, &NewEntry.GrantedHandles, Result);
+		}
+	}
+	
+	// Mesh 추가
 	Result->SpawnEquipmentActors(EquipmentCDO->ActorsToSpawn);
 	
 	return Result;
@@ -38,10 +51,31 @@ void FLinkEquipmentList::RemoveEntry(ULinkEquipmentInstance* Instance)
 		FLinkAppliedEquipmentEntry& Entry = *EntryIt;
 		if (Entry.Instance == Instance)
 		{
-			Instance->DestroyEquipmentActors();
+			ULinkAbilitySystemComponent* AbilitySystemComponent = GetAbilitySystemComponent();
+			check(AbilitySystemComponent);
+			
+			// Ability 제거 
+			{
+				Entry.GrantedHandles.TakeFromAbilitySystem(AbilitySystemComponent);
+			}
+			
+			// Mesh 제거
+			{
+				Instance->DestroyEquipmentActors();
+			}
+			
 			EntryIt.RemoveCurrent();
 		}
 	}
+}
+
+ULinkAbilitySystemComponent* FLinkEquipmentList::GetAbilitySystemComponent() const
+{
+	check(OwnerComponent);
+	// EquipmentManagerComponent 의 Pawn 을 가져옴
+	AActor* OwningActor = OwnerComponent->GetOwner();
+	
+	return Cast<ULinkAbilitySystemComponent>(UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(OwningActor));
 }
 
 ULinkEquipmentManagerComponent::ULinkEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer) : 
@@ -71,4 +105,23 @@ void ULinkEquipmentManagerComponent::UnequipItem(ULinkEquipmentInstance* ItemIns
 		ItemInstance->OnUnequipped();
 		EquipmentList.RemoveEntry(ItemInstance);
 	}
+}
+
+TArray<ULinkEquipmentInstance*> ULinkEquipmentManagerComponent::GetEquipmentInstanceOfType(
+	TSubclassOf<ULinkEquipmentInstance> InstanceType) const
+{
+	TArray<ULinkEquipmentInstance*> Result;
+	
+	for (const FLinkAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	{
+		if (ULinkEquipmentInstance* Instance = Entry.Instance)
+		{
+			if (Instance->IsA(InstanceType))
+			{
+				Result.Add(Instance);
+			}
+		}
+	}
+	
+	return Result;
 }
