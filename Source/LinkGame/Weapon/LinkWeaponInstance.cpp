@@ -6,3 +6,10 @@
 ULinkWeaponInstance::ULinkWeaponInstance(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 }
+
+TSubclassOf<UAnimInstance> ULinkWeaponInstance::PickBestAnimLayer(bool bEquipped,
+	const FGameplayTagContainer& CosmeticTags) const
+{
+	const FLinkAnimLayerSelectionSet& SetToQuery = (bEquipped ? EquippedAnimSet : UnequippedAnimSet);
+	return SetToQuery.SelectBestLayer(CosmeticTags);
+}

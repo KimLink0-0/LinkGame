@@ -16,7 +16,7 @@ public:
 	TSubclassOf<UAnimInstance> Layer;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FGameplayTagContainer LayerTags;
+	FGameplayTagContainer RequiredTags;
 };
 
 
@@ -24,6 +24,9 @@ USTRUCT(BlueprintType)
 struct FLinkAnimLayerSelectionSet
 {
 	GENERATED_BODY()
+	
+public:
+	TSubclassOf<UAnimInstance> SelectBestLayer(const FGameplayTagContainer& CosmeticTags) const;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

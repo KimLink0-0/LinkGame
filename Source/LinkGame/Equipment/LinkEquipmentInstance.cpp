@@ -16,6 +16,21 @@ APawn* ULinkEquipmentInstance::GetPawn() const
 	return Cast<APawn>(GetOuter()); 
 }
 
+APawn* ULinkEquipmentInstance::GetTypedPawn(TSubclassOf<APawn> PawnType) const
+{
+	APawn* Result = nullptr;
+	if (UClass* ActualPawnType = PawnType)
+	{
+		// 정의의 DeterminesOutputType 에 의해 형 변환이 될 거라
+		// 해당 Type 이 유효한지 체크
+		if (GetOuter()->IsA(ActualPawnType))
+		{
+			Result = Cast<APawn>(GetOuter());
+		}
+	}
+	return Result;
+}
+
 void ULinkEquipmentInstance::OnEquipped()
 {
 	K2_OnEquipped();

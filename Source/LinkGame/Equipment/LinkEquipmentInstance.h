@@ -24,6 +24,11 @@ public:
 	UFUNCTION(BlueprintPure, Category = Equipment)
 	APawn* GetPawn() const;
 	
+	// DeterminesOutputType 태그를 사용할 경우 = '값'
+	// '값' 과 동일한 타입의 값으로 변환해서 반환
+	UFUNCTION(BlueprintPure, Category = Equipment, meta = (DeterminesOutputType = PawnType))
+	APawn* GetTypedPawn(TSubclassOf<APawn> PawnType) const;
+	
 	virtual void OnEquipped();
 	
 	virtual void OnUnequipped();

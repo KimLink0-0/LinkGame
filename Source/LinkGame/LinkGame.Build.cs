@@ -17,11 +17,14 @@ public class LinkGame : ModuleRules
 			"InputCore", 
 			"EnhancedInput",
 			// 모듈형 컴포넌트 
-			"ModularGameplay",
 			"GameFeatures",
+			"ModularGameplay",
 			"ModularGameplayActors",
-			// GAS
+			// GAS Tag
 			"GameplayTags",
+			// GAS Ability System
+			"GameplayTasks",
+			"GameplayAbilities",
 			// CommonUser
 			"CommonUser",
 		});
