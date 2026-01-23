@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "LinkPawnData.generated.h"
 
+class ULinkGameplayAbilitySet;
 class ULinkInputConfig;
 class ULinkCameraMode;
 
@@ -27,4 +28,8 @@ public:
 	/** input configuration used by player controlled pawns to create input mappings and bind input actions */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Link|InputConfig")
 	TObjectPtr<ULinkInputConfig> InputConfig;
+	
+	/** Ability Sets */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Link|Abilities")
+	TArray<TObjectPtr<ULinkGameplayAbilitySet>> AbilitySets;
 };

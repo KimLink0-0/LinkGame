@@ -1,6 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "LinkPawnExtensionComponent.h"
+
+#include "AbilitySystem/LinkAbilitySystemComponent.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "LinkGame/LinkGameplayTags.h"
 #include "LinkGame/LinkLogChannels.h"
@@ -33,6 +35,44 @@ void ULinkPawnExtensionComponent::SetPawnData(const ULinkPawnData* InPawnData)
 void ULinkPawnExtensionComponent::SetupPlayerInputComponent()
 {
 	CheckDefaultInitialization();
+}
+
+void ULinkPawnExtensionComponent::InitializeAbilitySystem(ULinkAbilitySystemComponent* InAbilitySystemComponent,
+	AActor* InOwnerActor)
+{
+	check (InAbilitySystemComponent && InOwnerActor);
+	
+	if (AbilitySystemComponent == InAbilitySystemComponent)
+	{
+		return;
+	}
+	
+	// 시작
+	{
+		// 언리얼에서 자주 쓰는 패턴, 해제 후 다시 등록
+		if (AbilitySystemComponent)
+		{
+			UninitializeAbilitySystem();
+		}
+	
+		APawn* Pawn = GetPawnChecked<APawn>();
+		AActor* ExistingAvatar = InAbilitySystemComponent->GetAvatarActor();
+		check(!ExistingAvatar)
+	
+		// AbilitySystemComponent 를 캐싱하고, Owner 와 Avatar 설정
+		AbilitySystemComponent = InAbilitySystemComponent;
+		AbilitySystemComponent->InitAbilityActorInfo(InOwnerActor, Pawn);
+	}
+}
+
+void ULinkPawnExtensionComponent::UninitializeAbilitySystem()
+{
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+	
+	AbilitySystemComponent = nullptr;
 }
 
 void ULinkPawnExtensionComponent::OnRegister()

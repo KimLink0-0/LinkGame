@@ -117,6 +117,7 @@ void ULinkHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* M
 {
 	const FLinkGameplayTags& InitTags = FLinkGameplayTags::Get();
 
+	// InitState:: DataAvailable -> DataInitialized 
 	if (CurrentState == InitTags.InitState_DataAvailable && DesiredState == InitTags.InitState_DataInitialized)
 	{
 		APawn* Pawn = GetPawn<APawn>();
@@ -126,26 +127,39 @@ void ULinkHeroComponent::HandleChangeInitState(UGameFrameworkComponentManager* M
 			return;
 		}
 
-		const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
-		const ULinkPawnData* PawnData = nullptr;
-		if (ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
+		// PawnData Caching for Game Features
 		{
-			PawnData = PawnExtComp->GetPawnData<ULinkPawnData>();
-		}
-
-		if (bIsLocallyControlled && PawnData)
-		{
-			if (ULinkCameraComponent* CameraComponent = ULinkCameraComponent::FindCameraComponent(Pawn))
+			const bool bIsLocallyControlled = Pawn->IsLocallyControlled();
+			const ULinkPawnData* PawnData = nullptr;
+			if (ULinkPawnExtensionComponent* PawnExtComp = ULinkPawnExtensionComponent::FindPawnExtensionComponent(Pawn))
 			{
-				CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
+				PawnData = PawnExtComp->GetPawnData<ULinkPawnData>();
+				
+				// Ability System Section
+				{
+					PawnExtComp->InitializeAbilitySystem(LinkPS->GetLinkAbilitySystemComponent(), LinkPS);	
+				}
 			}
-		}
-
-		if (ALinkPlayerController* LinkPC = GetController<ALinkPlayerController>())
-		{
-			if (Pawn->InputComponent != nullptr)
+		
+			// Game Features
 			{
-				InitializePlayerInput(Pawn->InputComponent);
+				// Camera Section
+				if (bIsLocallyControlled && PawnData)
+				{
+					if (ULinkCameraComponent* CameraComponent = ULinkCameraComponent::FindCameraComponent(Pawn))
+					{
+						CameraComponent->DetermineCameraModeDelegate.BindUObject(this, &ThisClass::DetermineCameraMode);
+					}
+				}
+
+				// Input Section
+				if (ALinkPlayerController* LinkPC = GetController<ALinkPlayerController>())
+				{
+					if (Pawn->InputComponent != nullptr)
+					{
+						InitializePlayerInput(Pawn->InputComponent);
+					}
+				}
 			}
 		}
 	}

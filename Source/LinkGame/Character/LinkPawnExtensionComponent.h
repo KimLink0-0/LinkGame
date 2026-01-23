@@ -7,6 +7,7 @@
 #include "Components/GameFrameworkInitStateInterface.h"
 #include "LinkPawnExtensionComponent.generated.h"
 
+class ULinkAbilitySystemComponent;
 class ULinkPawnData;
 
 UCLASS()
@@ -18,21 +19,33 @@ public:
 
 	static const FName NAME_ActorFeatureName;
 	
+	// Member Methods
 	static ULinkPawnExtensionComponent* FindPawnExtensionComponent(const AActor* Actor) { return (Actor ? Actor->FindComponentByClass<ULinkPawnExtensionComponent>() : nullptr); }
 	template <class T>
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 	void SetPawnData(const ULinkPawnData* InPawnData);
 	void SetupPlayerInputComponent();
 	
-	virtual void OnRegister() final;
-	virtual void BeginPlay() final;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) final;
+	// Ability System
+	void InitializeAbilitySystem(ULinkAbilitySystemComponent* InAbilitySystemComponent, AActor* InOwnerActor);
+	void UninitializeAbilitySystem();
 	
+	// IGameFrameworkInitStateInterface
 	virtual FName GetFeatureName() const final { return NAME_ActorFeatureName; }
 	virtual void OnActorInitStateChanged(const FActorInitStateChangedParams& Params) final;
 	virtual bool CanChangeInitState(UGameFrameworkComponentManager* Manager, FGameplayTag CurrentState, FGameplayTag DesiredState) const final;
 	virtual void CheckDefaultInitialization() final;
 	
+	virtual void OnRegister() final;
+	virtual void BeginPlay() final;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) final;
+	
+public:
+	// PawnData Caching
 	UPROPERTY(EditInstanceOnly, Category = "Link|Pawn")
 	TObjectPtr<const ULinkPawnData> PawnData;
+	
+	// AbilitySystemComponent Caching
+	UPROPERTY()
+	TObjectPtr<ULinkAbilitySystemComponent> AbilitySystemComponent;
 };
